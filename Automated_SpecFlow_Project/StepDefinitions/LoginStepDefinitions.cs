@@ -9,31 +9,39 @@ namespace Automated_SpecFlow_Project.StepDefinitions
     [Binding]
     public class LoginStepDefinitions
     {
+        private AutomationHooks hooks;
+
+        // dependency injection
+        LoginStepDefinitions(AutomationHooks hooks)
+        {
+            this.hooks = hooks;
+        }
+
         [Given(@"I have a browser with orangehrm page")]
         public void GivenIHaveABrowserWithOrangehrmPage()
         {
-            AutomationHooks.driver = new ChromeDriver();
-            AutomationHooks.driver.Manage().Window.Maximize();
-            AutomationHooks.driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-            AutomationHooks.driver.Url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login";
+            hooks.driver = new ChromeDriver();
+            hooks.driver.Manage().Window.Maximize();
+            hooks.driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+            hooks.driver.Url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login";
         }
 
         [When(@"I enter username as '([^']*)'")]
         public void WhenIEnterUsernameAs(string username)
         {
-            AutomationHooks.driver.FindElement(By.Name("username")).SendKeys(username);
+            hooks.driver.FindElement(By.Name("username")).SendKeys(username);
         }
 
         [When(@"I enter password as '([^']*)'")]
         public void WhenIEnterPasswordAs(string password)
         {
-            AutomationHooks.driver.FindElement(By.Name("password")).SendKeys(password);
+            hooks.driver.FindElement(By.Name("password")).SendKeys(password);
         }
 
         [When(@"I click on login")]
         public void WhenIClickOnLogin()
         {
-            AutomationHooks.driver.FindElement(By.CssSelector("button[type='submit']")).Click();
+            hooks.driver.FindElement(By.CssSelector("button[type='submit']")).Click();
         }
 
         [Then(@"I should be navigated to '([^']*)' dashboard screen")]

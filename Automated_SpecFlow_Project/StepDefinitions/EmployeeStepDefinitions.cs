@@ -9,20 +9,28 @@ namespace Automated_SpecFlow_Project.StepDefinitions
     [Binding]
     public class EmployeeStepDefinitions
     {
+        private AutomationHooks hooks;
+
         public string firstName;
         public string middleName;
         public string lastName;
 
+        // dependecy injection
+        EmployeeStepDefinitions(AutomationHooks hooks)
+        {
+            this.hooks = hooks;
+        }
+
         [When(@"I click on PIM")]
         public void WhenIClickOnPIM()
         {
-            AutomationHooks.driver.FindElement(By.XPath("//span[text()='PIM']")).Click();
+            hooks.driver.FindElement(By.XPath("//span[text()='PIM']")).Click();
         }
 
         [When(@"I click on Add Employee")]
         public void WhenIClickOnAddEmployee()
         {
-            AutomationHooks.driver.FindElement(By.XPath("//a[text()='Add Employee']")).Click();
+            hooks.driver.FindElement(By.XPath("//a[text()='Add Employee']")).Click();
         }
 
         [When(@"I fill the add employee section")]
@@ -39,40 +47,40 @@ namespace Automated_SpecFlow_Project.StepDefinitions
             string status = table.Rows[0]["status"].ToString();
 
             // firstname
-            AutomationHooks.driver.FindElement(By.Name("firstName")).SendKeys(firstName);
+            hooks.driver.FindElement(By.Name("firstName")).SendKeys(firstName);
             
             // middlename
-            AutomationHooks.driver.FindElement(By.Name("middleName")).SendKeys(middleName);
+            hooks.driver.FindElement(By.Name("middleName")).SendKeys(middleName);
             
             // lastname
-            AutomationHooks.driver.FindElement(By.Name("lastName")).SendKeys(lastName);
+            hooks.driver.FindElement(By.Name("lastName")).SendKeys(lastName);
 
             // employee id
-            AutomationHooks.driver.FindElement(By.XPath("//label[text() = 'Employee Id']/following::input")).Clear();
-            AutomationHooks.driver.FindElement(By.XPath("//label[text() = 'Employee Id']/following::input")).SendKeys(employeeId);
+            hooks.driver.FindElement(By.XPath("//label[text() = 'Employee Id']/following::input")).Clear();
+            hooks.driver.FindElement(By.XPath("//label[text() = 'Employee Id']/following::input")).SendKeys(employeeId);
 
             // login details
             if (toggleLoginDetails.Equals("on"))
             {
-                AutomationHooks.driver.FindElement(By.XPath("//span[contains(@class,'oxd-switch-input')]")).Click();
+                hooks.driver.FindElement(By.XPath("//span[contains(@class,'oxd-switch-input')]")).Click();
 
                 // Username
-                AutomationHooks.driver.FindElement(By.XPath("//label[contains(text(), 'Username')]/following::input")).SendKeys(username);
+                hooks.driver.FindElement(By.XPath("//label[contains(text(), 'Username')]/following::input")).SendKeys(username);
                 
                 // Password
-                AutomationHooks.driver.FindElement(By.XPath("//label[contains(text(), 'Password')]/following::input")).SendKeys(password);
+                hooks.driver.FindElement(By.XPath("//label[contains(text(), 'Password')]/following::input")).SendKeys(password);
 
                 // Confirm Password
-                AutomationHooks.driver.FindElement(By.XPath("//label[contains(text(), 'Confirm Password')]/following::input")).SendKeys(confirmPassword);
+                hooks.driver.FindElement(By.XPath("//label[contains(text(), 'Confirm Password')]/following::input")).SendKeys(confirmPassword);
 
                 // status
                 if (status.Equals("disabled"))
                 {
-                    AutomationHooks.driver.FindElement(By.XPath("//label[text() = 'Enabled']")).Click();
+                    hooks.driver.FindElement(By.XPath("//label[text() = 'Enabled']")).Click();
                 }
                 else
                 {
-                    AutomationHooks.driver.FindElement(By.XPath("//label[text() = 'Disabled']")).Click();
+                    hooks.driver.FindElement(By.XPath("//label[text() = 'Disabled']")).Click();
                 }
             }
 
@@ -81,22 +89,22 @@ namespace Automated_SpecFlow_Project.StepDefinitions
         [When(@"I click on save employee")]
         public void WhenIClickOnSaveEmployee()
         {
-            AutomationHooks.driver.FindElement(By.CssSelector("button[type='submit']")).Click();
+            hooks.driver.FindElement(By.CssSelector("button[type='submit']")).Click();
         }
 
         [Then(@"I shopuld be navigated to personal details section with employee records")]
         public void ThenIShopuldBeNavigatedToPersonalDetailsSectionWithEmployeeRecords()
         {
             // Asserting First Name
-            string actualFirstName = AutomationHooks.driver.FindElement(By.Name("firstName")).GetAttribute("value");
+            string actualFirstName = hooks.driver.FindElement(By.Name("firstName")).GetAttribute("value");
             Assert.Equal(firstName, actualFirstName);
 
             // Asserting Middle Name
-            string actualMiddleName = AutomationHooks.driver.FindElement(By.Name("middleName")).GetAttribute("value");
+            string actualMiddleName = hooks.driver.FindElement(By.Name("middleName")).GetAttribute("value");
             Assert.Equal(middleName, actualMiddleName);
 
             // Asserting Last Name
-            string actualLastName = AutomationHooks.driver.FindElement(By.Name("lastName")).GetAttribute("value");
+            string actualLastName = hooks.driver.FindElement(By.Name("lastName")).GetAttribute("value");
             Assert.Equal(lastName, actualLastName);
         }
     }

@@ -12,7 +12,7 @@ namespace Automated_SpecFlow_Project.Hooks
     [Binding]
     public class AutomationHooks
     {
-        public static IWebDriver driver;
+        public IWebDriver driver;
 
         // Execution process - debug to understand the execution flow
         [BeforeTestRun]
